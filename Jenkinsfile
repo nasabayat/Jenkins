@@ -22,9 +22,9 @@ pipeline {
         }
     }
     // Required to view our test results in the UI
-    post {
-        always {
-            junit 'report.xml'
-        }
-    }
+#    post {
+#        always {
+#            junit 'report.xml'
+#        }
+#    }
 }
