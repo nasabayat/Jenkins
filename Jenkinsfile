@@ -7,18 +7,8 @@ pipeline {
                     }
                  }
 
-                 stage('Two') {
-                    steps {
-                    input('Do you want to proceed?')
-                    }
-                 }
-
-                 stage('Three') {
-                    when {
-                       not {
-                            branch "naser"
-                       }
-                    }
+                stage('Three') {
+                    
                     steps {
                         echo "Hello"
                     }
