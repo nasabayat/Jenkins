@@ -1,30 +1,48 @@
 pipeline {
-    agent {
-        docker { image 'golang:1.9.2-stretch'}
-    }
+         agent any
+         stages {
+                 stage('One') {
+                    steps {
+                        echo 'Hi, this is Zulaikha from edureka'
+                    }
+                 }
 
-    stages {
-        stage('Build'){
-            steps{
-                sh 'go get -u github.com/jstemmer/go-junit-report'
-                sh 'go build .'
-            }
+                 stage('Two') {
+                    steps {
+                    input('Do you want to proceed?')
+                    }
+                 }
+
+                 stage('Three') {
+                    when {
+                       not {
+                            branch "master"
+                       }
+                    }
+                    steps {
+                        echo "Hello"
+                    }
+                 }
+
+                 stage('Four') {
+                    parallel { 
+                            stage('Unit Test') {
+                                steps {
+                                    echo "Running the unit test..."
+                                }
+                            }
+                            stage('Integration test') {
+                                agent {
+                                       docker {
+                                            reuseNode true
+                                            image 'ubuntu'
+                                        }
+                                 }
+                                steps {
+                                    echo "Running the integration test..."
+                                }
+                            }
+                    }
+                }
         }
-        stage('Test'){
-            steps{
-                sh 'go test -v 2>&1 | go-junit-report > report.xml'
-            }
-        }
-        stage('Deploy'){
-            steps{
-                echo "Tiny bubbles\nIn my beer\nMakes me happy\nAnd full of cheer"
-            }
-        }
-    }
-    // Required to view our test results in the UI
-    post {
-        always {
-            junit 'report.xml'
-        }
-    }
 }
